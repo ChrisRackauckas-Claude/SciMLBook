@@ -132,7 +132,7 @@ prob = ODEProblem(simplependulum, u₀, tspan)
 sol = solve(prob, Tsit5(), reltol = 1e-6)
 
 using Plots
-plot(sol,plotdensity=100,vars=2)
+plot(sol,plotdensity=100,idxs=2)
 ```
 
 From here it is clear that as the pendulum goes forward, the uncertainty grows
@@ -223,7 +223,7 @@ gaccel = interval(9.77,9.81); # Gravitational constants
 L = interval(0.99,1.01); # Length of the pendulum
 
 #Initial Conditions
-u₀ = [interval(0,0), interval(((π / 3)-0.02),((π / 3)+0.02))] # Initial speed and initial angle
+u₀ = [interval(0,0), interval(((π / 3.0)-0.02),((π / 3.0)+0.02))] # Initial speed and initial angle
 tspan = (0.0, 6.3)
 
 #Define the problem
@@ -236,7 +236,7 @@ end
 
 #Pass to solvers
 prob = ODEProblem(simplependulum, u₀, tspan)
-sol = solve(prob, Tsit5(), adaptive=false, dt=0.1, reltol = 1e-6)
+sol = solve(prob, Euler(), dt=0.1)
 ```
 
 While we start out with reasonably small intervals, it turns out that every
@@ -255,7 +255,7 @@ gaccel = interval(9.8,9.8); # Gravitational constants
 L = interval(1.0,1.0); # Length of the pendulum
 
 #Initial Conditions
-u₀ = [interval(0,0), interval((π / 3),(π / 3))] # Initial speed and initial angle
+u₀ = [interval(0,0), interval((π / 3.0),(π / 3.0))] # Initial speed and initial angle
 tspan = (0.0, 6.3)
 
 #Define the problem
@@ -268,7 +268,7 @@ end
 
 #Pass to solvers
 prob = ODEProblem(simplependulum, u₀, tspan)
-sol = solve(prob, Vern9(), adaptive=false, dt=0.001, reltol = 1e-6)
+sol = solve(prob, Euler(), dt=0.001)
 ```
 
 ## Contextual Uncertainty Quantification
@@ -341,7 +341,7 @@ cb = AdaptiveProbIntsUncertainty(5) # 5th order method
 sol = solve(prob,Tsit5())
 ensemble_prob = EnsembleProblem(prob)
 sim = solve(ensemble_prob,Tsit5(),trajectories=100,callback=cb)
-plot(sim,vars=(0,1),linealpha=0.4)
+plot(sim,idxs=(0,1),linealpha=0.4)
 ```
 
 ```julia
@@ -349,7 +349,7 @@ cb = AdaptiveProbIntsUncertainty(5)
 sol = solve(prob,Tsit5())
 ensemble_prob = EnsembleProblem(prob)
 sim = solve(ensemble_prob,Tsit5(),trajectories=100,callback=cb,abstol=1e-3,reltol=1e-1)
-plot(sim,vars=(0,1),linealpha=0.4)
+plot(sim,idxs=(0,1),linealpha=0.4)
 ```
 
 Notice that while an interval estimate would have grown to allow all extremes
